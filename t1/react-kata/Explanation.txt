@@ -1,0 +1,6 @@
+A React component re-renders when its state or props change. 
+Calling a useState setter schedules a re-render rather than 
+mutating the variable in place; React then calls the component 
+function again with the new state value to produce a fresh UI snapshot. 
+This is why direct mutation (e.g., count++) fails—only the setter 
+tells React that a new render is needed.
