@@ -1,0 +1,37 @@
+Context is the right tool when the same data is needed by many components at 
+different nesting depths and the value changes infrequently — theme, locale, 
+or a logged-in user. If only one or two components need the data, keep it local 
+or lift it to the nearest common parent; Context adds indirection and re-renders 
+every consumer for no benefit. For frequently-changing data with complex update 
+logic (dashboards, editors, anything that updates on every keystroke), a dedicated 
+store like Zustand or Redux is a better fit because Context's consumer-wide re-render 
+propagation becomes the bottleneck.
+
+Keyboard-Only Accessibility Audit Notes
+Components audited: Button (Primary, Secondary, Disabled) and ThemeToggleButton.
+
+Method: Mouse physically set aside and trackpad left untouched. Navigated using only Tab, Shift+Tab, Enter, and Space. Focus state observed visually on each stop.
+
+1. Tab reachability: could every interactive element be reached with Tab alone?
+Yes, with one intentional exception. Tab order from the top of the page: ThemeToggleButton → Primary → Secondary → (wraps to browser chrome). The Disabled button is correctly skipped by Tab; the native disabled attribute removes it from the tab order, which is the correct behavior for a disabled control. No interactive element was unreachable, and no non-interactive element stole a tab stop. 
+
+2. Visible focus indicator: could you tell which element had focus just by looking?
+Yes. The browser's default focus ring appeared on every focused button. No outline: none (or equivalent) was set anywhere in the styles, so focus was always visible on the current element. 
+
+3. Keyboard activation: could buttons be activated with only the keyboard?
+Yes. On each focused enabled button (ThemeToggleButton, Primary, Secondary), pressing Enter activated it, and pressing Space also activated it. The Disabled button could not be focused, so it could not be activated by keyboard or mouse;correct behavior for a disabled control. 
+
+4. Failures and what would fix them.
+No failures: all three components are native <button> elements, which get Tab focus, Enter/Space activation, and the disabled attribute behavior from the browser for free.
+
+For contrast, if Button had been implemented as <div onClick={...}> instead of <button>, all three checks would fail, and the fixes would be:
+
+Tab reachability → add tabIndex="0" to put it in the tab order.
+
+Semantic role → add role="button" so assistive tech announces it as a button.
+
+Keyboard activation → add an onKeyDown handler firing onClick on Enter and Space, calling event.preventDefault() on Space to stop the page from scrolling.
+
+Disabled behavior → disabled does nothing on a <div>; you'd need to manually check a disabled flag in every handler and block focus/activation.
+
+Using a real <button> avoids all of that work and is why the Button component is built on the native element rather than a styled <div>.
