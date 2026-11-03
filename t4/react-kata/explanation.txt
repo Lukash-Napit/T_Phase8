@@ -1,0 +1,37 @@
+Keyboard-test note
+I tested every component with keyboard-only navigation (mouse disconnected), 
+at both a narrow (375px) and wide (1280px) viewport.
+
+Button: Tab-focusable; Enter and Space both activate; Disabled is skipped by 
+Tab and cannot be activated. No fixes needed (native <button> provides all of this).
+
+Modal: Opening via keyboard moves focus into the dialog (the dialog container
+receives focus with tabIndex={-1} so a screen reader announces "Example dialog, dialog").
+Tab cycles through the modal's focusable elements (name input → Save → Close → wrap to name input);
+Shift+Tab from the name input wraps to Close. Escape closes the modal and focus returns to the "Open modal" button.
+Fix made: the task's worked example deliberately omits the focus trap 
+("What's missing from this skeleton … does NOT yet trap focus"), and my first version reflected that;
+Tab from the last element escaped to the page behind. I added a document-level keydown handler that gets 
+the modal's focusable elements and intercepts Tab at the boundaries (last → first, and 
+first/container → last on Shift+Tab). That was the only custom keyboard code I wrote.
+
+TextInput: Tab-focusable. Typed an invalid value; the error is rendered with role="alert" 
+and wired to the input via aria-invalid="true" + aria-describedby. Verified visually that 
+the input border turns red and the message is under the field. No fixes needed.
+
+Select: Tab-focusable; Space/Alt+Down opens the list; arrows navigate; Enter selects.
+Native behavior; no fixes needed.
+
+Checkbox: Tab-focusable; Space toggles; Disabled is skipped by Tab. No fixes needed.
+
+Responsive: Confirmed at 375px and 1280px that all components remain usable: buttons retain 
+a 44px touch target, the modal is full-width on mobile and centered with max-width on desktop,
+and form fields stay full-width inside their containers. No layout overflow at either width.
+
+React.memo
+I deliberately did not wrap any component in React.memo. In the demo page, each component 
+re-renders only when its own state or its parent changes, and the parent is a mostly-static page; 
+there's no measured re-render cost to avoid. If a consumer rendered hundreds of Buttons in a list
+that re-renders on every keystroke, memo would be justified because the buttons' props don't change; 
+without that concrete case, memo would add a shallow-compare on every render for no benefit, which is 
+exactly the "applying it reflexively" pitfall the task warns against.
