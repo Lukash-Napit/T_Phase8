@@ -1,0 +1,62 @@
+:root {
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  color: #1e293b;
+  background-color: #f8fafc;
+}
+
+body { margin: 0; padding: 0; }
+
+.documentation {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+header { margin-bottom: 3rem; text-align: center; }
+section { margin-bottom: 4rem; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.desc { color: #64748b; margin-bottom: 1.5rem; font-style: italic; }
+
+.demo-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+.demo-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+@media (min-width: 600px) { .demo-grid { grid-template-columns: 1fr 1fr; } }
+
+/* Button */
+.btn {
+  padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid transparent;
+  font-weight: 600; cursor: pointer; min-height: 44px; font-size: 1rem;
+}
+.btn:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: #2563eb; color: white; }
+.btn-secondary { background: white; color: #2563eb; border-color: #2563eb; }
+
+/* Form Fields */
+.form-field { display: flex; flex-direction: column; gap: 0.25rem; }
+.form-field label { font-weight: 600; font-size: 0.875rem; }
+.form-field input, .form-field select {
+  padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 6px;
+  min-height: 44px; font-size: 1rem; font-family: inherit;
+}
+.form-field input:focus-visible, .form-field select:focus-visible {
+  outline: 2px solid #2563eb; outline-offset: 1px; border-color: #2563eb;
+}
+.form-field input[aria-invalid="true"], .form-field select[aria-invalid="true"] {
+  border-color: #dc2626;
+}
+.error-text { color: #dc2626; font-size: 0.875rem; }
+
+.checkbox-wrapper { display: flex; align-items: center; gap: 0.5rem; }
+.checkbox-wrapper input { min-height: auto; width: 1.25rem; height: 1.25rem; }
+
+/* Modal */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  display: flex; align-items: center; justify-content: center; padding: 1rem; z-index: 1000;
+}
+.modal-content {
+  background: white; padding: 1.5rem; border-radius: 8px;
+  width: 100%; max-width: 500px; outline: none;
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+}
+.modal-body { margin: 1rem 0; }
